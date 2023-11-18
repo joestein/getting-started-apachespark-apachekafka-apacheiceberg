@@ -8,6 +8,7 @@ from confluent_kafka.avro import AvroProducer
 from utils.load_avro_schema_from_file import load_avro_schema_from_file
 from utils.parse_command_line_args import parse_command_line_args
 
+#TODO depecreated AvroProducer
 #https://www.markhneedham.com/blog/2023/07/25/confluent-kafka-avroproducer-deprecated-use-avroserializer/
 def send_record(args):
     if args.record_value is None:
