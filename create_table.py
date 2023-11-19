@@ -19,7 +19,7 @@ conf = (
     SparkConf()
         .setAppName('app_name')
   		#packages
-        .set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.4,org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.4.1,software.amazon.awssdk:bundle:2.18.31,software.amazon.awssdk:url-connection-client:2.18.31,org.projectnessie.nessie-integrations:nessie-spark-extensions-3.3_2.12:0.71.0')
+        .set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.4,org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.4.2,software.amazon.awssdk:bundle:2.18.31,software.amazon.awssdk:url-connection-client:2.18.31,org.projectnessie.nessie-integrations:nessie-spark-extensions-3.5_2.12:0.73.0')
   		#Configuring Catalog
         #.set('spark.sql.catalog.icebergcat', 'org.apache.iceberg.spark.SparkCatalog')
         #.set('spark.sql.catalog.icebergcat.type', 'hadoop')
