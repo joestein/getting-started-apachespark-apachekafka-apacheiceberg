@@ -27,6 +27,15 @@ conf = (
         .set('spark.sql.catalog.icebergcat.io-impl', 'org.apache.iceberg.aws.s3.S3FileIO')
         .set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
         .set('spark.hadoop.fs.s3a.impl', 'org.apache.hadoop.fs.s3a.S3AFileSystem')
+
+        #nessie integration - https://iceberg.apache.org/docs/latest/nessie/
+        .set("spark.sql.catalog.nessie.warehouse", "/tmp/nessie/wharehouse");
+        .set("spark.sql.catalog.nessie.uri", "http://localhost:19120/api/v1")
+        .set("spark.sql.catalog.nessie.ref", "main")
+        .set("spark.sql.catalog.nessie.catalog-impl", "org.apache.iceberg.nessie.NessieCatalog")
+        .set("spark.sql.catalog.nessie", "org.apache.iceberg.spark.SparkCatalog")
+        .set("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions,org.projectnessie.spark.extensions.NessieSparkSessionExtensions")
+        
 )
     
 spark = SparkSession.builder.config(conf=conf).getOrCreate()
