@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-#pyspark --packages org.apache.hadoop:hadoop-aws:3.2.2,org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.spark:spark-avro_2.12:3.5.0,software.amazon.awssdk:bundle:2.18.31,software.amazon.awssdk:url-connection-client:2.18.31
 import argparse
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
@@ -32,6 +31,7 @@ conf = (
         .set("spark.sql.catalog.nessie.warehouse", "/tmp/nessie/wharehouse")
         .set("spark.sql.catalog.nessie.uri", "http://localhost:19120/api/v1")
         .set("spark.sql.catalog.nessie.ref", ref)
+        .set("spark.sql.catalog.nessie.authentication.type","NONE")
         .set("spark.sql.catalog.nessie.catalog-impl", "org.apache.iceberg.nessie.NessieCatalog")
         .set("spark.sql.catalog.nessie", "org.apache.iceberg.spark.SparkCatalog")
         .set("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions,org.projectnessie.spark.extensions.NessieSparkSessionExtensions")
@@ -42,26 +42,14 @@ spark._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3
 spark._jsc.hadoopConfiguration().set("fs.s3a.aws.credentials.provider", "com.amazonaws.auth.InstanceProfileCredentialsProvider,com.amazonaws.auth.DefaultAWSCredentialsProviderChain")
 spark._jsc.hadoopConfiguration().set("fs.AbstractFileSystem.s3a.impl", "org.apache.hadoop.fs.s3a.S3A")
 
-warehouse="spark-warehouse-nessie"
-spark.sql(f"""
-  CREATE CATALOG nessiecat1test
-          WITH (
-            'type'='iceberg',
-            'catalog-impl'='org.apache.iceberg.nessie.NessieCatalog',
-            'uri'='http://localhost:19120/api/v1',
-            'ref'='{ref}',
-            'warehouse' = '{warehouse}')
-          """).show()
+#spark.sql(f"""
+#  CREATE TABLE nessie.{table_name} (
+#          email STRING, 
+#          firstName STRING, 
+#          lastName STRING
+#          ) 
+#          USING iceberg
+#          LOCATION 's3a://{catalog}/{table_name}'
+#""")
 
-spark.sql("""
-  CREATE DATABASE nessiecat1test.nessiedb1test
-          """).show()
-
-spark.sql("""
-  CREATE TABLE nessiecat1test.nessiedb1test.nessiedb1test.%s (
-          email STRING, 
-          firstName STRING, 
-          lastName STRING
-          ) 
-          USING iceberg
-""" % (table_name))
+spark.sql("select * from nessie.yoyoma4").show()
