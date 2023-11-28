@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
@@ -9,7 +8,7 @@ conf = (
     SparkConf()
         .setAppName('app_name')
   		#packages
-        .set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.4,org.apache.iceberg:iceberg-spark-runtime-3.5_2.13:1.4.2,software.amazon.awssdk:bundle:2.18.31,software.amazon.awssdk:url-connection-client:2.18.31,org.projectnessie.nessie-integrations:nessie-spark-extensions-3.5_2.12:0.73.0')
+        .set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.4,org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.4.2,software.amazon.awssdk:bundle:2.18.31,software.amazon.awssdk:url-connection-client:2.18.31,org.projectnessie.nessie-integrations:nessie-spark-extensions-3.5_2.12:0.74.0')
   		#Configuring Catalog
         #.set('spark.sql.catalog.icebergcat', 'org.apache.iceberg.spark.SparkCatalog')
         #.set('spark.sql.catalog.icebergcat.type', 'hadoop')
@@ -34,3 +33,11 @@ spark._jsc.hadoopConfiguration().set("fs.s3a.aws.credentials.provider", "com.ama
 spark._jsc.hadoopConfiguration().set("fs.AbstractFileSystem.s3a.impl", "org.apache.hadoop.fs.s3a.S3A")
 
 spark.sql("select * from nessie.getting_started_table").show()
+
+spark.sql("""
+CALL catalog.system.rewrite_data_files(
+  table => 'nessie.getting_started_table', 
+  strategy => 'binpack', 
+  options => map('min-input-files','2')
+)
+          """)
