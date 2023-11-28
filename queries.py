@@ -34,10 +34,14 @@ spark._jsc.hadoopConfiguration().set("fs.AbstractFileSystem.s3a.impl", "org.apac
 
 spark.sql("select * from nessie.getting_started_table").show()
 
+# when you are ready for maintenance you will need to run stored procedures like the below
+# which compacts files taking care of the small file problem slowing queries down
+# for more on maintenance https://iceberg.apache.org/docs/latest/maintenance/
+
 spark.sql("""
-CALL catalog.system.rewrite_data_files(
-  table => 'nessie.getting_started_table', 
-  strategy => 'binpack', 
-  options => map('min-input-files','2')
-)
+         CALL nessie.system.rewrite_data_files(
+            table => 'nessie.getting_started_table', 
+            strategy => 'binpack', 
+            options => map('min-input-files','2')
+         )
           """)
