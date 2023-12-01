@@ -5,7 +5,7 @@ This code is from the post [here](https://hello.bitsnbytes.world/2023/11/19/gett
 
 It then included an integration with the [Nessie](https://projectnessie.org/) Catalog written up in this [post](https://hello.bitsnbytes.world/2023/11/19/data-lake-branch-tag-and-commit-log-history-with-project-nessie/)
 
-I then updated it for [minio]() posted [here]()
+I then updated it for [minio](https://min.io/) posted [here](https://hello.bitsnbytes.world/2023/12/01/apache-spark-apache-kafka-apache-iceberg-nessie-and-minio/)
 
 # Up and Running
 
