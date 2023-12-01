@@ -48,3 +48,25 @@ services:
     container_name: nessie-server
     ports:
       - "19120:19120"
+    networks:
+      iceberg_net:      
+
+  # Minio Storage Server
+  minio:
+    image: 'minio/minio:latest'
+    container_name: minio
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_DOMAIN=storage
+      - MINIO_REGION_NAME=us-east-1
+      - MINIO_REGION=us-east-1
+    ports:
+      - 9001:9001
+      - 9000:9000  
+    networks:
+      iceberg_net:      
+    command: ["server", "/data", "--console-address", ":9001"]
+
+networks:
+  iceberg_net:    
